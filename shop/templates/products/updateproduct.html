@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% include '_messages.html' %}
+<div class="container">
+   <div class="row">
+      <div class="col-md-2"></div>
+      <div class="com-md-8">
+         <h2 class="text-center">Update product</h2>
+         <!--        importujemy plik formhelpers za pomocą którego tworzymy pola dla nowego produktu:-->
+         {% from "_formhelpers.html" import render_field %}
+         <form action="" method="POST" enctype="multipart/form-data">
+            {{ render_field(form.name, class="form-control", placeholder="Product name" )}}
+            {{ render_field(form.price, class="form-control", placeholder="Price" )}}
+            {{ render_field(form.description, class="form-control", placeholder="Description",
+            rows="10" )}}
+            <!--        pola do importu zdjęć:    -->
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-4">{{ render_field(form.image_1, class="form-control")}}</div>
+                  <div class="col-md-4">{{ render_field(form.image_2, class="form-control")}}</div>
+                  <div class="col-md-4">{{ render_field(form.image_3, class="form-control")}}</div>
+               </div>
+            </div>
+            <button type="submit" class="btn btn-info mt-4"> Update Product </button>
+
+         </form>
+
+         <a href="{{url_for('products')}}" class="btn btn-warning" style="margin-top: -65px; margin-left: 160px" >Cancel</a>
+
+
+      </div>
+
+      <div class="col-md-2"></div>
+   </div>
+</div>
+<br>
+
+
+{% endblock content %}

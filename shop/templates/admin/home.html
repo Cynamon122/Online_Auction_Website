@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% include '_messages.html' %}
+<div class="container">
+
+
+    <!-- Display all products -->
+    <div class="row">
+        {% for product in products.items %}
+        <div class="col-md-3 mt-3">
+            <div class="card product-card">
+                <div class="product-image">
+                    <img src="{{ url_for('static', filename='images/' + product.image_1) }}" alt="{{ product.name }}"
+                         class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <div class="product-info">
+                        <h5 class="text-center">{{ product.name }}</h5>
+                        <p class="text-center">{{ product.price }} zł</p>
+                    </div>
+                </div>
+                <div class="product-actions card-footer">
+                    <a href="{{url_for('single_page', id=product.id)}}"
+                       class="btn btn-sm btn-primary btn-block">Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Display page numbers for all products -->
+    <div class="row">
+        <div class="col text-center">
+            <!-- Display page numbers -->
+            {% if products.has_prev %}
+            <a href="{{ url_for('home', page=products.prev_num) }}"
+               class="btn btn-outline-info btn-sm mt-3">Previous</a>
+            {% endif %}
+            {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=1) %}
+            {% if page_num %}
+            {% if products.page == page_num %}
+            <a href="{{ url_for('home', page=page_num) }}" class="btn btn-info btn-sm mt-3">{{ page_num }}</a>
+            {% else %}
+            <a href="{{ url_for('home', page=page_num) }}" class="btn btn-outline-info btn-sm mt-3">{{ page_num }}</a>
+            {% endif %}
+            {% else %}
+            ...
+            {% endif %}
+            {% endfor %}
+            {% if products.has_next %}
+            <a href="{{ url_for('home', page=products.next_num) }}" class="btn btn-outline-info btn-sm mt-3">Next</a>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+<br>
+<style>
+        .product-card {
+            height: 400px;
+        }
+
+        .product-image {
+            padding: 5px;
+        }
+
+        .product-info {
+            position: absolute;
+            bottom: 50px;
+            left: 0px;
+            right: 0px;
+        }
+
+        img {
+            max-height: 250px;
+            object-fit: contain;
+        }
+
+</style>
+{% endblock content %}

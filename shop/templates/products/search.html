@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+{% include '_messages.html' %}
+
+<div class="container">
+
+    <!--wyświetlamy produkty danej marki/brandu-->
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-3 mt-3">
+            <div class="card a">
+                <div class="b">
+                    <img src="{{url_for('static', filename='images/' + product.image_1)}}" alt="{{product.name}}"
+                         class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <div class="c">
+                        <h5 class="text-center">{{product.name}}</h5>
+                        <p class="text-center">{{product.price}} zł</p>
+                    </div>
+                </div>
+                <div class="b card-footer">
+                    <a href="{{url_for('single_page', id=product.id)}}" class="float-left btn btn-sm btn-primary">
+                        Details</a>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<br>
+
+<style>
+div.a {
+  height: 400px;
+}
+
+div.b {
+  padding: 5px;
+}
+
+div.c {
+    position: absolute;
+    bottom: 50px;
+    left: 0px;
+    right: 0px;
+}
+
+img {
+    max-height:250px;
+    object-fit: contain
+}
+
+
+</style>
+
+{% endblock content %}

@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% include '_messages.html' %}
+
+<div class="container mt-5">
+    <table class="table table-sm table-condensed table-striped table-hover">
+        <thead>
+        <h5>Orders</h5>
+        </thead>
+        <thead>
+        <th>Sr</th>
+        <th>Invoice</th>
+        <th>Status</th>
+        <th>Date created</th>
+        <th>Ordered items</th>
+        <th>Customer Name</th>
+        <th>Customer Address</th>
+        <th>Contact</th>
+        <th>Actions</th> <!-- Dodajemy nową kolumnę na akcje -->
+        </thead>
+        <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ order.invoice }}</td>
+            <td>
+                <!-- Dodajemy formularz wyboru statusu -->
+                <form method="post" action="{{ url_for('update_order_status', order_id=order.id) }}">
+                    <select name="status" onchange="this.form.submit()">
+                        <option value="Pending" {% if order.status=='Pending' %}selected{% endif %}>Pending</option>
+                        <option value="Payment completed" {% if order.status=='Payment completed' %}selected{% endif %}>Payment completed</option>
+                    </select>
+                </form>
+            </td>
+            <td>{{ order.date_created.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>
+                <ul>
+                    {% for item in order.items %}
+                    <li>
+                        {{ item.product.name }}<br>
+                        quantity: {{ item.quantity }}<br>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>{{ order.customer.name }}</td>
+            <td>
+                {{ order.customer.address }}<br>
+                {{ order.customer.zipcode }}<br>
+                {{ order.customer.city }}<br>
+                {{ order.customer.country }}
+            </td>
+            <td>
+                {{ order.customer.email }}<br>
+                {{ order.customer.contact }}
+            </td>
+            <td>
+                <!-- Dodajemy link do edycji zamówienia -->
+                <a href="#">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

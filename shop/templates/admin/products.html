@@ -1,0 +1,89 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% include '_messages.html' %}
+
+<div class="container mt-5">
+    <table class="table table-sm table-condensed table-striped table-hover">
+        <thead>
+        <h5>Products</h5>
+        </thead>
+        <thead>
+        <th>Sr</th>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Image</th>
+        <th>Edit</th>
+        <th>Cancel auction</th>
+        </thead>
+        <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{loop.index}}</td>
+            <td>{{product.name}}</td>
+            <td>{{product.price}}</td>
+            <td><img src="{{url_for('static', filename='images/' + product.image_1)}}" width="50" height="50"></td>
+            <td>
+                {% if product.highest_bidder is none %}
+                <a href="{{ url_for('updateproduct', id=product.id) }}" class="btn btn-sm btn-info">Edit</a>
+                {% else %}
+                <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#exampleModal">
+                    Edit
+                </button>
+                {% endif %}
+            </td>
+            <td>
+                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
+                        data-target="#CancelAuctionModal-{{product.id}}">Cancel auction
+                </button>
+            </td>
+        </tr>
+        <!-- Modal Edit Item -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModal">Cannot edit active auction</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Somebody is already bidding on this item. If you want to edit this item please contact customer
+                        support or delete it and place it again.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="CancelAuctionModal-{{product.id}}" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{product.name}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure that you want to cancel this auction?
+                    </div>
+                    <div class="modal-footer">
+                        <form action="{{url_for('deleteproduct', id=product.id)}}" method="POST">
+                            <button type="submit" class="btn btn-sm btn-danger">Cancel auction</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
